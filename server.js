@@ -7,9 +7,10 @@ const db = require('./db/database');
 const apiRoutes = require('./routes/apiRoutes');
 
 
-app.use('/api', apiRoutes);
+
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+app.use('/api', apiRoutes);
 
 app.use((req, res) => {
     res.status(404).end();

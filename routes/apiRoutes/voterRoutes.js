@@ -56,6 +56,41 @@ router.post('/voter', ({body}, res) => {
     });
 });
 
+router.put('/voter/:id', (req, res) => {
+    const errors = inputCheck(req.body, 'email');
+    if (errors) {
+        res.status(400).json({ error: errors });
+        return;
+    }
+    const sql = `UPDATE voters SET email = ? WHERE id = ?`;
+    const params = [req.body.email, req.params.id];
+    db.run(sql, params, function(err, data) {
+        if (err) {
+            res.status(400).json({ error: err.message });
+            return;
+        }
+        res.json({
+            message: 'success',
+            data: req.body,
+            changes: this.changes
+        });
+    });
+});
+
+router.delete('/voter/:id', (req, res) => {
+    const sql = `DELETE FROM voters WHERE id = ?`;
+    db.run(sql, req.params.id, function(err, result) {
+        if (err) {
+            res.status(400).json({ error: res.message });
+            return;
+        }
+        res.json({
+            message: 'deleted',
+            changes: this.changes
+        });
+    });
+});
+
 
 
 module.exports = router;
